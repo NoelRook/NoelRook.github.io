@@ -20,26 +20,7 @@ const geometry = new THREE.TorusGeometry(10,3, 16,100);
 const material = new THREE.MeshStandardMaterial({ color: 0xFF6347});
 const torus = new THREE.Mesh( geometry, material ); // combining geometry and material
 
-//scene.add(torus);
-
-//test adding blender models (amongus)
-
-var loader = new THREE.GLTFLoader();
-loader.load(
-   "./Models/scene.gltf",
-   function ( gltf ) {
-      var scale = 5.6;
-      Amongus.body = gltf.scene.children[0];
-      Amongus.body.name = "body";
-      Amongus.body.rotation.set ( 0, -1.5708, 0 );
-      Amongus.body.scale.set (scale,scale,scale);
-      Amongus.body.position.set ( 0, 3.6, 0 );
-      Amongus.body.castShadow = true;
-      Amongus.frame.add(bus.body);
-   },
-);
-
-scene.add( Amongus.frame );
+scene.add(torus);
 
 const pointLight = new THREE.PointLight(0xffffff); //add a light point to view the 3d obnject
 pointLight.position.set(20,20,20);
@@ -58,13 +39,9 @@ function animate(){
   // so a better approach is to just use a revursive function
   requestAnimationFrame(animate);
   // control the rotation speed of the x,y,z axis
-  //torus.rotation.x += 0.01; 
-  //torus.rotation.y += 0.005;
-  //torus.rotation.z += 0.01;
-
-  Amongus.rotation.x += 0.01; 
-  Amongus.rotation.y += 0.005;
-  Amongus.rotation.z += 0.01;
+  torus.rotation.x += 0.01; 
+  torus.rotation.y += 0.005;
+  torus.rotation.z += 0.01;
 
   controls.update(); // update the view based on the mouse dragging the screen
   //render the scene and ready the camera
