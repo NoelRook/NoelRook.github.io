@@ -1,3 +1,4 @@
+import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitControls.js"; 
 //Setup
 
 const scene = new THREE.Scene();
