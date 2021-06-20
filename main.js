@@ -30,7 +30,7 @@ const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(lightHelper,gridHelper);
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
+//const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 function animate(){
   // we don't want to call the render method over and over in the code, 
@@ -40,7 +40,7 @@ function animate(){
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
 
-  controls.update();
+  //controls.update();
 
   renderer.render(scene, camera);
 }
