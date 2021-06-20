@@ -1,38 +1,54 @@
+import './style.css'
 
-var camera, scene, renderer;
-var geometry, material, mesh;
+import * as THREE from './three.js-master/build/three.module.js';
 
-	init();
-	animate();
+import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
 
-	function init() {
+//Setup
 
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-		camera.position.z = 1000;
+const scene = new THREE.Scene();
 
-		scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75,window.innerWidth / window.innerHeight, 0.1, 1000);
 
-		geometry = new THREE.CubeGeometry( 200, 200, 200 );
-		material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector('#bg'),
+});
 
-		mesh = new THREE.Mesh( geometry, material );
-		scene.add( mesh );
+renderer.setPixelRatio(window.devicePixelRatio); 
+renderer.setSize( window.innerWidth, window.innerHeight);
+camera.position.setZ(30);
 
-		renderer = new THREE.CanvasRenderer();
-		renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.render(scene, camera);
 
-		document.body.appendChild( renderer.domElement );
+const geometry = new THREE.TorusGeometry(10,3, 16,100);
+const material = new THREE.MeshStandardMaterial({ color: 0xFF6347});
+const torus = new THREE.Mesh( geometry, material ); // combining geometry and material
 
-	}
+scene.add(torus);
 
-	function animate() {
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(20,20,20);
 
-		// note: three.js includes requestAnimationFrame shim
-		requestAnimationFrame( animate );
+const ambientLight = new THREE.AmbientLight(0xffffff);
+scene.add(pointLight, ambientLight);
 
-		mesh.rotation.x += 0.01;
-		mesh.rotation.y += 0.02;
+const lightHelper = new THREE.PointLightHelper(pointLight);
+const gridHelper = new THREE.GridHelper(200, 50);
+scene.add(lightHelper,gridHelper);
 
-		renderer.render( scene, camera );
+const controls = new OrbitControls(camera, renderer.domElement);
 
-	}
+function animate(){
+  // we don't want to call the render method over and over in the code, 
+  // so a better approach is to just use a revursive function
+  requestAnimationFrame(animate);
+  torus.rotation.x += 0.01;
+  torus.rotation.y += 0.005;
+  torus.rotation.z += 0.01;
+
+  controls.update();
+
+  renderer.render(scene, camera);
+}
+animate();
+
