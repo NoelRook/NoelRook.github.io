@@ -1,9 +1,3 @@
-import './style.css'
-
-import * as THREE from './three.js-master/build/three.module.js';
-
-import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
-
 //Setup
 
 const scene = new THREE.Scene();
