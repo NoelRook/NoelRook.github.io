@@ -1,3 +1,4 @@
+import {OrbitControls} from "./three.js-master/examples/jsm/controls/OrbitControls.js"
 //Setup
 
 const scene = new THREE.Scene();
@@ -30,7 +31,7 @@ const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(lightHelper,gridHelper);
 
-const controls = new THREE.OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls( camera, renderer.domElement );
 
 function animate(){
   // we don't want to call the render method over and over in the code, 
