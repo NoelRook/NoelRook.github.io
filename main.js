@@ -1,6 +1,6 @@
-import * as THREE from './node_modules/three.js';
+import * as THREE from './three/build/three';
 
-import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from './three/examples/jsm/controls/OrbitControls';
 
 //Setup
 
