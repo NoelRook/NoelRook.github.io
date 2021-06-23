@@ -1,4 +1,5 @@
 import {OrbitControls} from "./three.js-master/examples/jsm/controls/OrbitControls.js"
+
 // Setup
 
 // define planets in solar system
@@ -43,16 +44,15 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.set(10,10,10);
+camera.position.set(15,15,15);
 renderer.render(scene, camera);
 
-// to add in 
 // planets
 // create planets
 solarsystem.forEach(d => create(d, scene));
 // sun (working)
 //define and create sun
-let sun = sphere({radius:5, orbit:0, map:suntexture});
+let sun = sphere({radius:8, orbit:0, map:suntexture});
 scene.add(sun)
 // create
 function create(d, target) {
@@ -90,16 +90,6 @@ function sphere(d){
   return o;
 }
 
-//render
-
-// Torus (remove later)
-/*
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
-const torus = new THREE.Mesh(geometry, material); // claim as parent
-
-scene.add(torus);
-*/
 // Lights (change later)
 
 const pointLight = new THREE.PointLight(0xffffff, 1, 100 );
@@ -148,38 +138,15 @@ Array(300).fill().forEach(addStar); //deploy each star
 const spaceTexture = new THREE.TextureLoader().load('texture/space.jpg');
 scene.background = spaceTexture;
 
-// Moon (to be removed)
-/*
-const moonTexture = new THREE.TextureLoader().load('moon.jpg');
-const normalTexture = new THREE.TextureLoader().load('normal.jpg');
-
-const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(3, 32, 32),
-  new THREE.MeshStandardMaterial({
-    map: moonTexture,
-    normalMap: normalTexture,
-  })
-);
-
-//scene.add(moon);
-torus.add(moon);// add moon as child to torus
-
-moon.position.z = 30;
-moon.position.setX(-10);
-*/
 
 // Scroll Animation (modify to fit new solar system)
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
   
-  /*moon.rotation.x += 0.05;
-  moon.rotation.y += 0.075;
-  moon.rotation.z += 0.05;*/
-
-  camera.position.z = t * -0.005;
+  camera.position.z = t * -0.006;
   //camera.position.x = t * -0.0002;
-  camera.position.y = t * -0.009;
+  camera.position.y = t * -0.01;
 }
 
 document.body.onscroll = moveCamera;
@@ -227,13 +194,6 @@ function animate() {
         d.satellites && d.satellites.forEach(upd)
     }
   
-  //torus.rotation.x += 0.01;
-  //torus.rotation.y -= 0.005;
-  //torus.rotation.z += 0.01;
-
-  //moon.rotation.x += 0.005;
-  //stars.rotation.y += 0.001;
-  //controls.update();
   renderer.render(scene, camera);
   
 }
