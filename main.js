@@ -75,8 +75,9 @@ function create(d, target) {
 function orbit(d) {
   var o = new THREE.Object3D('orbit '+d.name);
   o.rotateX(Math.PI/2);  
-  var geometry = new THREE.Line( new THREE.CircleBufferGeometry( d.orbit, 64,0,0 ), new THREE.LineBasicMaterial( { color: 0xffffff } ) );
-  o.add(geometry);
+  var lineGeometry =  new THREE.Line( new THREE.CircleBufferGeometry( d.orbit, 64,0,0 ), new THREE.LineBasicMaterial( { color: 0xffffff } ) );; 
+  var ringGeometry = new THREE.Line( new THREE.RingGeometry( d.orbit,d.orbit, 64,0,0 ), new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+  o.add(ringGeometry,lineGeometry);
   return o;
 }
 // sphere (working?)
