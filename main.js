@@ -8,29 +8,37 @@ const venus = new THREE.TextureLoader().load('texture/venus.jpg'); //define text
 const mars = new THREE.TextureLoader().load('texture/mars.jpg'); //define textures used
 const suntexture = new THREE.TextureLoader().load('texture/sun.jpg'); //define textures used
 const earthTexture = new THREE.TextureLoader().load('texture/earth.jpg');
+const mercuryTexture = new THREE.TextureLoader().load('texture/mercury.jpg');
 
+// edit solar system
 let solarsystem = [{
-  map: mars,
-  name: 'mars', radius: 2, orbit: 20, speed: 1.607,
+  map: mercuryTexture,
+  name: 'mercury', radius: 0.383, orbit: 11.387, speed: 1.607,
   satellites: [{
     map: moonTexture, rotation: [1, 1, 1],
-      name: 'rock', radius: 0.5, orbit: 4, speed: 6,
+      name: 'rock', radius: 0.1, orbit: 2, speed: 6,
   },{
     map: moonTexture,
-      name: 'moon', radius: 1, orbit: 6, speed: 1,
+      name: 'moon', radius: 0.15, orbit: 1, speed: 3  ,
   }]
 }, {
   map: venus,
-  name: 'mars', radius: 2, orbit: 30, speed: 1.174,
+  name: 'venus', radius: 0.949, orbit: 15.723, speed: 1.174,
   satellites: []
 }, {
   map: earthTexture,
-  name: 'earth', radius: 2, orbit: 50, speed: 1,
+  name: 'earth', radius: 1, orbit: 20, speed: 1,
   satellites: [{
-    map: moonTexture,
-      name: 'deimos', radius: 0.5, orbit: 4, speed: 3,
+    map: moonTexture, rotation: [0, 0.05, 0.05],
+      name: 'deimos', radius: 0.2724, orbit: 1.7, speed: 3,
   }]
-}];
+}, {
+  map: mars,
+  name: 'mars', radius: 1, orbit: 30.48, speed: 0.802,
+  satellites: []
+}
+
+];
 
 //start scene
 
@@ -44,9 +52,10 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.set(15,15,15);
+camera.position.set(12,15,15);
 renderer.render(scene, camera);
 
+// to add in 
 // planets
 // create planets
 solarsystem.forEach(d => create(d, scene));
@@ -90,6 +99,16 @@ function sphere(d){
   return o;
 }
 
+//render
+
+// Torus (remove later)
+/*
+const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
+const torus = new THREE.Mesh(geometry, material); // claim as parent
+
+scene.add(torus);
+*/
 // Lights (change later)
 
 const pointLight = new THREE.PointLight(0xffffff, 1, 100 );
@@ -138,12 +157,35 @@ Array(300).fill().forEach(addStar); //deploy each star
 const spaceTexture = new THREE.TextureLoader().load('texture/space.jpg');
 scene.background = spaceTexture;
 
+// Moon (to be removed)
+/*
+const moonTexture = new THREE.TextureLoader().load('moon.jpg');
+const normalTexture = new THREE.TextureLoader().load('normal.jpg');
+
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(3, 32, 32),
+  new THREE.MeshStandardMaterial({
+    map: moonTexture,
+    normalMap: normalTexture,
+  })
+);
+
+//scene.add(moon);
+torus.add(moon);// add moon as child to torus
+
+moon.position.z = 30;
+moon.position.setX(-10);
+*/
 
 // Scroll Animation (modify to fit new solar system)
 
 function moveCamera() {
-  const t = document.body.getBoundingClientRect().top;
+  const t = document.body.getBoundingClientRect().top - 200;
   
+  /*moon.rotation.x += 0.05;
+  moon.rotation.y += 0.075;
+  moon.rotation.z += 0.05;*/
+
   camera.position.z = t * -0.006;
   //camera.position.x = t * -0.0002;
   camera.position.y = t * -0.01;
@@ -193,7 +235,16 @@ function animate() {
         d.o.rotateY(t2/10000*d.speed);
         d.satellites && d.satellites.forEach(upd)
     }
+
+  console.log(camera.position);
   
+  //torus.rotation.x += 0.01;
+  //torus.rotation.y -= 0.005;
+  //torus.rotation.z += 0.01;
+
+  //moon.rotation.x += 0.005;
+  //stars.rotation.y += 0.001;
+  //controls.update();
   renderer.render(scene, camera);
   
 }
