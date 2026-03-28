@@ -1,0 +1,483 @@
+<canvas id="bg-scene" aria-hidden="true"></canvas>
+
+<script>
+  import * as THREE from "three";
+
+  const canvas = document.querySelector("#bg-scene");
+
+  if (canvas instanceof HTMLCanvasElement) {
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x18120e, 20, 85);
+
+    const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 220);
+    camera.position.set(0, 5.5, 25);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const ambient = new THREE.HemisphereLight(0xffcc8f, 0x2a2018, 0.72);
+    const sun = new THREE.DirectionalLight(0xffbb6d, 1.35);
+    sun.position.set(7, 12, 9);
+    const rim = new THREE.DirectionalLight(0xff8f36, 0.45);
+    rim.position.set(-8, 4, -6);
+    scene.add(ambient, sun, rim);
+
+    const world = new THREE.Group();
+    scene.add(world);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(55, 160, 1, 1),
+      new THREE.MeshStandardMaterial({
+        color: 0x1a140f,
+        roughness: 0.9,
+        metalness: 0.08
+      })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -2.4;
+    ground.position.z = -24;
+    world.add(ground);
+
+    const laneLines = new THREE.Group();
+    for (let i = 0; i < 40; i += 1) {
+      const marker = new THREE.Mesh(
+        new THREE.BoxGeometry(0.2, 0.03, 1.7),
+        new THREE.MeshBasicMaterial({ color: 0xf3b165 })
+      );
+      marker.position.set(0, -2.35, -i * 4);
+      laneLines.add(marker);
+    }
+    world.add(laneLines);
+
+    const pillars = [];
+    const pillarGroup = new THREE.Group();
+    for (let i = 0; i < 24; i += 1) {
+      const pillar = new THREE.Mesh(
+        new THREE.BoxGeometry(1.05, THREE.MathUtils.randFloat(2.6, 5.8), 1.05),
+        new THREE.MeshStandardMaterial({
+          color: i % 2 === 0 ? 0xff9a42 : 0x5f2f17,
+          roughness: 0.45,
+          metalness: 0.2,
+          emissive: i % 2 === 0 ? 0x47220c : 0x1d120a
+        })
+      );
+
+      const side = i % 2 === 0 ? -1 : 1;
+      pillar.position.x = side * THREE.MathUtils.randFloat(4.5, 9.5);
+      pillar.position.y = -0.95;
+      pillar.position.z = -i * 6 - THREE.MathUtils.randFloat(1.5, 4);
+      pillar.rotation.y = THREE.MathUtils.randFloat(0, Math.PI);
+      pillarGroup.add(pillar);
+      pillars.push(pillar);
+    }
+    world.add(pillarGroup);
+
+    const heroOrb = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(2.2, 2),
+      new THREE.MeshStandardMaterial({
+        color: 0xffc785,
+        roughness: 0.25,
+        metalness: 0.55,
+        emissive: 0x6a3110,
+        emissiveIntensity: 0.55
+      })
+    );
+    heroOrb.position.set(0, 1.55, 0.5);
+
+    const orbitFrame = new THREE.Mesh(
+      new THREE.TorusGeometry(3.1, 0.12, 24, 130),
+      new THREE.MeshStandardMaterial({
+        color: 0xffdfab,
+        roughness: 0.42,
+        metalness: 0.65,
+        emissive: 0x3f220f,
+        wireframe: true
+      })
+    );
+    orbitFrame.rotation.x = Math.PI / 2.7;
+
+    const centerpiece = new THREE.Group();
+    centerpiece.add(heroOrb, orbitFrame);
+    world.add(centerpiece);
+
+    const orbiters = [];
+    const orbiterGroup = new THREE.Group();
+    for (let i = 0; i < 14; i += 1) {
+      const orbiter = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(THREE.MathUtils.randFloat(0.15, 0.35), 0),
+        new THREE.MeshStandardMaterial({
+          color: i % 2 === 0 ? 0xffcb8a : 0xff8e38,
+          roughness: 0.3,
+          metalness: 0.6,
+          emissive: 0x3d1f0b,
+          emissiveIntensity: 0.5
+        })
+      );
+      const angle = (i / 14) * Math.PI * 2;
+      const radius = THREE.MathUtils.randFloat(3.5, 5.2);
+      orbiter.position.set(Math.cos(angle) * radius, THREE.MathUtils.randFloat(-1.2, 1.8), Math.sin(angle) * radius);
+      orbiter.userData = {
+        baseRadius: radius,
+        speed: THREE.MathUtils.randFloat(0.4, 1.3),
+        offset: THREE.MathUtils.randFloat(0, Math.PI * 2)
+      };
+      orbiterGroup.add(orbiter);
+      orbiters.push(orbiter);
+    }
+    world.add(orbiterGroup);
+
+    const particleCount = window.innerWidth < 720 ? 520 : 980;
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i += 1) {
+      const i3 = i * 3;
+      positions[i3] = THREE.MathUtils.randFloatSpread(130);
+      positions[i3 + 1] = THREE.MathUtils.randFloat(0, 30);
+      positions[i3 + 2] = THREE.MathUtils.randFloatSpread(150);
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    const particles = new THREE.Points(
+      particlesGeometry,
+      new THREE.PointsMaterial({
+        color: 0xffd39e,
+        size: 0.12,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    scene.add(particles);
+
+    const pointer = { x: 0, y: 0 };
+    const keyboard = { left: 0, right: 0, up: 0, down: 0 };
+    let keyboardX = 0;
+    let keyboardY = 0;
+
+    window.addEventListener("pointermove", (event) => {
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    const setKeyState = (event, isPressed) => {
+      const key = event.key.toLowerCase();
+      if (key === "arrowleft" || key === "a") keyboard.left = isPressed ? 1 : 0;
+      if (key === "arrowright" || key === "d") keyboard.right = isPressed ? 1 : 0;
+      if (key === "arrowup" || key === "w") keyboard.up = isPressed ? 1 : 0;
+      if (key === "arrowdown" || key === "s") keyboard.down = isPressed ? 1 : 0;
+    };
+
+    window.addEventListener("keydown", (event) => setKeyState(event, true));
+    window.addEventListener("keyup", (event) => setKeyState(event, false));
+
+    const revealItems = document.querySelectorAll(".reveal");
+    const sceneSections = Array.from(document.querySelectorAll("[data-scene]"));
+    const navLinks = Array.from(document.querySelectorAll(".floating-nav a"));
+
+    const sceneStates = {
+      hero: {
+        orbEmissive: new THREE.Color(0x6a3110),
+        orbIntensity: 0.58,
+        fogNear: 20,
+        fogFar: 85,
+        sunIntensity: 1.35,
+        rimIntensity: 0.45,
+        laneSpeed: 0.18,
+        pillarLift: 0.1,
+        travelScale: 1,
+        orbSpin: 0.45,
+        frameSpin: 0.18,
+        bobAmp: 0.3,
+        pillarWaveSpeed: 1.4,
+        particleSwirl: 0.03,
+        orbiterSpeed: 0.5,
+        orbiterPulse: 0.25,
+        lookDepth: -10
+      },
+      about: {
+        orbEmissive: new THREE.Color(0x6b2919),
+        orbIntensity: 0.62,
+        fogNear: 18,
+        fogFar: 75,
+        sunIntensity: 1.2,
+        rimIntensity: 0.54,
+        laneSpeed: 0.22,
+        pillarLift: 0.13,
+        travelScale: 1.05,
+        orbSpin: 0.52,
+        frameSpin: 0.24,
+        bobAmp: 0.34,
+        pillarWaveSpeed: 1.55,
+        particleSwirl: 0.038,
+        orbiterSpeed: 0.65,
+        orbiterPulse: 0.35,
+        lookDepth: -12
+      },
+      skills: {
+        orbEmissive: new THREE.Color(0x7a3f14),
+        orbIntensity: 0.75,
+        fogNear: 16,
+        fogFar: 66,
+        sunIntensity: 1.52,
+        rimIntensity: 0.62,
+        laneSpeed: 0.25,
+        pillarLift: 0.17,
+        travelScale: 1.2,
+        orbSpin: 0.7,
+        frameSpin: 0.38,
+        bobAmp: 0.45,
+        pillarWaveSpeed: 1.9,
+        particleSwirl: 0.052,
+        orbiterSpeed: 1,
+        orbiterPulse: 0.55,
+        lookDepth: -14
+      },
+      experience: {
+        orbEmissive: new THREE.Color(0x5b2a1b),
+        orbIntensity: 0.5,
+        fogNear: 22,
+        fogFar: 88,
+        sunIntensity: 1.05,
+        rimIntensity: 0.4,
+        laneSpeed: 0.17,
+        pillarLift: 0.09,
+        travelScale: 0.92,
+        orbSpin: 0.38,
+        frameSpin: 0.14,
+        bobAmp: 0.22,
+        pillarWaveSpeed: 1.2,
+        particleSwirl: 0.024,
+        orbiterSpeed: 0.42,
+        orbiterPulse: 0.2,
+        lookDepth: -9
+      },
+      projects: {
+        orbEmissive: new THREE.Color(0x7d3e16),
+        orbIntensity: 0.86,
+        fogNear: 14,
+        fogFar: 63,
+        sunIntensity: 1.7,
+        rimIntensity: 0.72,
+        laneSpeed: 0.28,
+        pillarLift: 0.2,
+        travelScale: 1.35,
+        orbSpin: 1.04,
+        frameSpin: 0.66,
+        bobAmp: 0.58,
+        pillarWaveSpeed: 2.35,
+        particleSwirl: 0.073,
+        orbiterSpeed: 1.65,
+        orbiterPulse: 0.88,
+        lookDepth: -18
+      },
+      contact: {
+        orbEmissive: new THREE.Color(0x8a4d1c),
+        orbIntensity: 0.95,
+        fogNear: 15,
+        fogFar: 72,
+        sunIntensity: 1.45,
+        rimIntensity: 0.66,
+        laneSpeed: 0.2,
+        pillarLift: 0.14,
+        travelScale: 1.06,
+        orbSpin: 0.62,
+        frameSpin: 0.3,
+        bobAmp: 0.36,
+        pillarWaveSpeed: 1.5,
+        particleSwirl: 0.044,
+        orbiterSpeed: 0.86,
+        orbiterPulse: 0.5,
+        lookDepth: -13
+      }
+    };
+
+    const activeState = {
+      orbEmissive: new THREE.Color(sceneStates.hero.orbEmissive),
+      orbIntensity: sceneStates.hero.orbIntensity,
+      fogNear: sceneStates.hero.fogNear,
+      fogFar: sceneStates.hero.fogFar,
+      sunIntensity: sceneStates.hero.sunIntensity,
+      rimIntensity: sceneStates.hero.rimIntensity,
+      laneSpeed: sceneStates.hero.laneSpeed,
+      pillarLift: sceneStates.hero.pillarLift,
+      travelScale: sceneStates.hero.travelScale,
+      orbSpin: sceneStates.hero.orbSpin,
+      frameSpin: sceneStates.hero.frameSpin,
+      bobAmp: sceneStates.hero.bobAmp,
+      pillarWaveSpeed: sceneStates.hero.pillarWaveSpeed,
+      particleSwirl: sceneStates.hero.particleSwirl,
+      orbiterSpeed: sceneStates.hero.orbiterSpeed,
+      orbiterPulse: sceneStates.hero.orbiterPulse,
+      lookDepth: sceneStates.hero.lookDepth
+    };
+    let targetScene = "hero";
+
+    const setActiveNav = (navKey) => {
+      navLinks.forEach((link) => {
+        const hrefTarget = link.getAttribute("href")?.replace("#", "") ?? "";
+        link.classList.toggle("is-active", hrefTarget === navKey);
+      });
+    };
+
+    if (sceneSections.length > 0 && "IntersectionObserver" in window) {
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const sceneKey = entry.target.getAttribute("data-scene") || "hero";
+              const navKey = entry.target.getAttribute("data-nav") || "about";
+              targetScene = sceneKey in sceneStates ? sceneKey : "hero";
+              setActiveNav(navKey);
+            }
+          });
+        },
+        {
+          threshold: 0.35,
+          rootMargin: "-12% 0px -36% 0px"
+        }
+      );
+
+      sceneSections.forEach((section) => sectionObserver.observe(section));
+      setActiveNav("about");
+    }
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.18,
+          rootMargin: "0px 0px -8% 0px"
+        }
+      );
+
+      revealItems.forEach((item, index) => {
+        if (item instanceof HTMLElement) {
+          item.style.transitionDelay = `${Math.min(index * 85, 340)}ms`;
+        }
+        observer.observe(item);
+      });
+    } else {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    const onResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener("resize", onResize);
+
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+      const elapsed = clock.getElapsedTime();
+      const scrollY = window.scrollY || window.pageYOffset;
+      const normalizedScroll =
+        scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1);
+
+      const stateTarget = sceneStates[targetScene] ?? sceneStates.hero;
+      activeState.orbEmissive.lerp(stateTarget.orbEmissive, 0.035);
+      activeState.orbIntensity = THREE.MathUtils.lerp(activeState.orbIntensity, stateTarget.orbIntensity, 0.035);
+      activeState.fogNear = THREE.MathUtils.lerp(activeState.fogNear, stateTarget.fogNear, 0.04);
+      activeState.fogFar = THREE.MathUtils.lerp(activeState.fogFar, stateTarget.fogFar, 0.04);
+      activeState.sunIntensity = THREE.MathUtils.lerp(activeState.sunIntensity, stateTarget.sunIntensity, 0.04);
+      activeState.rimIntensity = THREE.MathUtils.lerp(activeState.rimIntensity, stateTarget.rimIntensity, 0.04);
+      activeState.laneSpeed = THREE.MathUtils.lerp(activeState.laneSpeed, stateTarget.laneSpeed, 0.04);
+      activeState.pillarLift = THREE.MathUtils.lerp(activeState.pillarLift, stateTarget.pillarLift, 0.05);
+      activeState.travelScale = THREE.MathUtils.lerp(activeState.travelScale, stateTarget.travelScale, 0.05);
+      activeState.orbSpin = THREE.MathUtils.lerp(activeState.orbSpin, stateTarget.orbSpin, 0.05);
+      activeState.frameSpin = THREE.MathUtils.lerp(activeState.frameSpin, stateTarget.frameSpin, 0.05);
+      activeState.bobAmp = THREE.MathUtils.lerp(activeState.bobAmp, stateTarget.bobAmp, 0.05);
+      activeState.pillarWaveSpeed = THREE.MathUtils.lerp(activeState.pillarWaveSpeed, stateTarget.pillarWaveSpeed, 0.05);
+      activeState.particleSwirl = THREE.MathUtils.lerp(activeState.particleSwirl, stateTarget.particleSwirl, 0.05);
+      activeState.orbiterSpeed = THREE.MathUtils.lerp(activeState.orbiterSpeed, stateTarget.orbiterSpeed, 0.06);
+      activeState.orbiterPulse = THREE.MathUtils.lerp(activeState.orbiterPulse, stateTarget.orbiterPulse, 0.06);
+      activeState.lookDepth = THREE.MathUtils.lerp(activeState.lookDepth, stateTarget.lookDepth, 0.04);
+
+      scene.fog.near = activeState.fogNear;
+      scene.fog.far = activeState.fogFar;
+      sun.intensity = activeState.sunIntensity;
+      rim.intensity = activeState.rimIntensity;
+      heroOrb.material.emissive.copy(activeState.orbEmissive);
+      heroOrb.material.emissiveIntensity = activeState.orbIntensity;
+
+      const keyboardTargetX = (keyboard.right - keyboard.left) * 2.2;
+      const keyboardTargetY = (keyboard.up - keyboard.down) * 1.3;
+      keyboardX = THREE.MathUtils.lerp(keyboardX, keyboardTargetX, 0.07);
+      keyboardY = THREE.MathUtils.lerp(keyboardY, keyboardTargetY, 0.07);
+
+      laneLines.children.forEach((marker, index) => {
+        marker.position.z += activeState.laneSpeed;
+        if (marker.position.z > 8) {
+          marker.position.z = -140 - index;
+        }
+      });
+
+      pillars.forEach((pillar, index) => {
+        pillar.position.y = -0.95 + Math.sin(elapsed * activeState.pillarWaveSpeed + index) * activeState.pillarLift;
+      });
+
+      orbiters.forEach((orbiter) => {
+        const baseRadius = orbiter.userData.baseRadius;
+        const speed = orbiter.userData.speed;
+        const offset = orbiter.userData.offset;
+
+        const radiusPulse = baseRadius + Math.sin(elapsed * 2 + offset) * activeState.orbiterPulse;
+        const theta = elapsed * speed * activeState.orbiterSpeed + offset;
+
+        orbiter.position.x = Math.cos(theta) * radiusPulse;
+        orbiter.position.y = Math.sin(theta * 1.6) * (0.7 + activeState.orbiterPulse * 0.25);
+        orbiter.position.z = Math.sin(theta) * radiusPulse;
+        orbiter.rotation.x += 0.02;
+        orbiter.rotation.y += 0.03;
+      });
+
+      orbiterGroup.rotation.y = elapsed * 0.22;
+      orbiterGroup.rotation.x = Math.sin(elapsed * 0.45) * 0.08;
+
+      centerpiece.rotation.y = elapsed * activeState.orbSpin + normalizedScroll * 0.8 + keyboardX * 0.08;
+      centerpiece.rotation.x = Math.sin(elapsed * 0.35) * 0.14;
+      heroOrb.position.y = 1.55 + Math.sin(elapsed * 1.7) * activeState.bobAmp;
+      orbitFrame.rotation.z = elapsed * activeState.frameSpin;
+
+      particles.rotation.y = elapsed * activeState.particleSwirl;
+      particles.position.z = -normalizedScroll * 14 * activeState.travelScale;
+
+      const targetCameraX = pointer.x * 2.6 + keyboardX;
+      const targetCameraY = pointer.y * 1.2 + 4.5 + keyboardY;
+      const targetCameraZ = 25 - normalizedScroll * 9 * activeState.travelScale;
+
+      camera.position.x += (targetCameraX - camera.position.x) * 0.035;
+      camera.position.y += (targetCameraY - camera.position.y) * 0.032;
+      camera.position.z += (targetCameraZ - camera.position.z) * 0.05;
+
+      const lookX = keyboardX * 0.6;
+      const lookY = 1.2 + keyboardY * 0.4;
+      const lookZ = activeState.lookDepth - normalizedScroll * 8;
+      camera.lookAt(lookX, lookY, lookZ);
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }
+</script>

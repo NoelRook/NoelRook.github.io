@@ -1,84 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3D application</title>
+    <meta
+      name="description"
+      content="Software developer portfolio and resume site with interactive 3D visuals."
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <title>Lee Jing Kang | Software Developer</title>
   </head>
   <body>
-    <canvas id="bg"></canvas>
-    <main>
+    <canvas id="bg" aria-hidden="true"></canvas>
 
-      <header>
+    <main>
+      <header class="hero reveal">
+        <p class="kicker">Software Developer</p>
         <h1>Lee Jing Kang</h1>
-        <p>🚀 Welcome to my website!</p>
+        <p class="tagline">
+          I build production-ready software with thoughtful architecture, clean UI,
+          and practical performance.
+        </p>
+        <div class="hero-meta">
+          <span>Singapore</span>
+          <span>Open to Opportunities</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#projects">View Projects</a>
+          <a href="#contact" class="secondary">Contact</a>
+        </div>
       </header>
 
-
-      <blockquote>
-        <p>I like making stuff and putting it on the internet</p>
-      </blockquote>
-
-      <section>
-        <h2>📜 Manifesto</h2>
+      <section class="panel reveal" id="about">
+        <h2>About</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          I enjoy turning complex requirements into reliable products. My focus is
+          full-stack development, developer tooling, and building systems that are
+          easy to maintain as teams and features grow.
         </p>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
       </section>
 
-      <section class="light">
-        <h2>👩🏽‍🚀 Projects</h2>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
-        <h2>🏆 Accomplishments</h2>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
+      <section class="panel reveal" id="skills">
+        <h2>Core Skills</h2>
+        <ul class="chips">
+          <li>JavaScript / TypeScript</li>
+          <li>Python</li>
+          <li>React / Next.js</li>
+          <li>Node.js</li>
+          <li>REST APIs</li>
+          <li>SQL / PostgreSQL</li>
+          <li>Docker</li>
+          <li>AWS</li>
+          <li>CI/CD</li>
+          <li>Testing & QA</li>
+        </ul>
       </section>
 
-      <blockquote>
-        <p>The best way out is always through <br>-Robert Frost</p>
-      </blockquote>
-
-      <section class="left">
-        <h2>🌮 Work History</h2>
-
-        <h3>Hayysoft</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <h3>Temasek Polytechnic Advanced manufacturing center</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <h3>Taco Bell</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
+      <section class="panel reveal" id="experience">
+        <h2>Experience</h2>
+        <article class="timeline-item">
+          <div class="timeline-head">
+            <h3>Software Engineer Intern</h3>
+            <p>Hayysoft</p>
+          </div>
+          <p>
+            Built internal tools that automated repetitive workflows and reduced
+            manual processing time.
+          </p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-head">
+            <h3>Engineering Intern</h3>
+            <p>Temasek Polytechnic Advanced Manufacturing Centre</p>
+          </div>
+          <p>
+            Contributed to digital manufacturing workflows and documented
+            repeatable engineering processes for cross-team handoff.
+          </p>
+        </article>
       </section>
 
-      <blockquote>
-        <p>Thanks for watching!</p>
-      </blockquote>
+      <section class="panel reveal" id="projects">
+        <h2>Selected Projects</h2>
+        <div class="project-grid">
+          <article class="project-card">
+            <h3>Realtime Task Dashboard</h3>
+            <p>
+              Full-stack dashboard with role-based auth, realtime updates, and
+              deployment automation.
+            </p>
+            <span>React, Node.js, PostgreSQL, Docker</span>
+          </article>
+          <article class="project-card">
+            <h3>3D Data Visual Explorer</h3>
+            <p>
+              Interactive Three.js visualization for exploring large datasets with
+              custom camera interactions.
+            </p>
+            <span>Three.js, WebGL, JavaScript</span>
+          </article>
+          <article class="project-card">
+            <h3>Developer Automation CLI</h3>
+            <p>
+              Command-line toolkit to scaffold services, enforce standards, and
+              speed up onboarding.
+            </p>
+            <span>TypeScript, Node.js, CI Pipelines</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel reveal" id="contact">
+        <h2>Contact</h2>
+        <p>
+          Interested in building high-impact products together?
+        </p>
+        <div class="contact-links">
+          <a href="mailto:leejingkang@example.com">Email</a>
+          <a href="https://github.com/NoelRook" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>
+      </section>
     </main>
+
     <script src="./three.js-master/build/three.min.js"></script>
-    <script type="module" src="/main.js"></script>
-    
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
