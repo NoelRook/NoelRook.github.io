@@ -31,8 +31,8 @@ export const profile = {
 
 export const aboutParagraphs: string[] = [
   "I enjoy breaking systems just enough to understand them, then rebuilding them properly. That mindset shows up when I am debugging UI issues, cleaning up state flow, or wiring together something that needs to feel precise and reliable.",
-  "I am especially interested in frontend work for scientific and technical tools: dashboards, instrumentation views, visualization layers, and interfaces where clarity matters more than decoration.",
-  "I also spent time on exchange in Korea, which taught me how to adapt quickly, collaborate across different working styles, and stay calm when everything feels unfamiliar."
+  "That mindset drives my approach to full-stack development, where I bridge the gap between robust backend logic and precise, functional interfaces. I am particularly interested in developing end-to-end technical tools, from architecting cloud-integrated data layers to designing the visualization tools that make them accessible. For me, clarity and performance always outweigh decoration. My background in design and computer science helps me ensure that every part of the stack—from the database to the final user interaction—is both logical and dependable. Furthermore, my time on exchange in Korea has made me a versatile collaborator, capable of staying grounded and productive even when navigating unfamiliar tech stacks or working environments.",
+  "I also spent time on exchange in Korea and China, which taught me how to adapt quickly, collaborate across different working styles, and stay calm when everything feels unfamiliar."
 ];
 
 export const interests: string[] = [
