@@ -1,0 +1,145 @@
+<canvas id="three-backdrop" class="three-backdrop" aria-hidden="true"></canvas>
+
+<script type="module">
+  import * as THREE from "three";
+
+  const canvas = document.querySelector("#three-backdrop");
+
+  if (canvas instanceof HTMLCanvasElement) {
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x07111f, 0.03);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 120);
+    camera.position.set(0, 0.8, 10);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const ambient = new THREE.AmbientLight(0xa5b9ff, 0.65);
+    const key = new THREE.DirectionalLight(0x7ee6ff, 1.6);
+    key.position.set(3, 4, 6);
+    const rim = new THREE.DirectionalLight(0x9b7cff, 0.85);
+    rim.position.set(-4, -2, 5);
+    scene.add(ambient, key, rim);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const orb = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.65, 1),
+      new THREE.MeshStandardMaterial({
+        color: 0x8aa9ff,
+        roughness: 0.18,
+        metalness: 0.62,
+        emissive: 0x121f4b,
+        emissiveIntensity: 0.75,
+      })
+    );
+    orb.position.set(-1.4, 0.6, 0.2);
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(2.8, 0.08, 12, 120),
+      new THREE.MeshStandardMaterial({
+        color: 0x84f1e2,
+        roughness: 0.3,
+        metalness: 0.45,
+        emissive: 0x11333d,
+        wireframe: true,
+      })
+    );
+    ring.rotation.x = Math.PI / 2.2;
+
+    const knot = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(0.95, 0.22, 120, 16),
+      new THREE.MeshStandardMaterial({
+        color: 0xffb68c,
+        roughness: 0.28,
+        metalness: 0.58,
+        emissive: 0x361b10,
+        emissiveIntensity: 0.5,
+      })
+    );
+    knot.position.set(2.3, -0.8, 0.6);
+
+    group.add(orb, ring, knot);
+
+    const particleCount = window.innerWidth < 768 ? 420 : 760;
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i += 1) {
+      const index = i * 3;
+      positions[index] = THREE.MathUtils.randFloatSpread(18);
+      positions[index + 1] = THREE.MathUtils.randFloatSpread(12);
+      positions[index + 2] = THREE.MathUtils.randFloatSpread(18);
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    const particles = new THREE.Points(
+      particlesGeometry,
+      new THREE.PointsMaterial({
+        color: 0xd8e2ff,
+        size: 0.04,
+        transparent: true,
+        opacity: 0.72,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      })
+    );
+    scene.add(particles);
+
+    const pointer = { x: 0, y: 0 };
+    const onPointerMove = (event) => {
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    const onResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("resize", onResize);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+      const elapsed = clock.getElapsedTime();
+      const scrollY = window.scrollY || 0;
+      const scrollFactor = scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1);
+
+      group.rotation.y = elapsed * 0.16 + scrollFactor * 0.5;
+      group.rotation.x = Math.sin(elapsed * 0.2) * 0.12;
+      orb.rotation.y = elapsed * 0.9;
+      orb.rotation.x = elapsed * 0.35;
+      ring.rotation.z = elapsed * 0.18;
+      knot.rotation.x = -elapsed * 0.55;
+      knot.rotation.y = elapsed * 0.42;
+
+      particles.rotation.y = elapsed * 0.03 + scrollFactor * 0.25;
+      particles.rotation.x = Math.sin(elapsed * 0.08) * 0.05;
+
+      camera.position.x += (pointer.x * 0.8 - camera.position.x) * 0.035;
+      camera.position.y += ((pointer.y * 0.5) + 0.8 - camera.position.y) * 0.035;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+
+      if (!reduceMotion) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  }
+</script>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ThreeBackdrop from "../components/ThreeBackdrop.astro";
 import {
   aboutParagraphs,
   interests,
@@ -15,6 +16,8 @@ import {
   title={`${profile.name} | ${profile.role}`}
   description="Portfolio of Jing Kang, a CS student and builder focused on full-stack systems, problem solving, and experimental web projects."
 >
+  <ThreeBackdrop />
+
   <div class="bg-layer" aria-hidden="true">
     <span class="blob blob-a"></span>
     <span class="blob blob-b"></span>
@@ -160,7 +163,7 @@ import {
 
     const bugToast = document.createElement("div");
     bugToast.className = "bug-toast";
-    bugToast.textContent = "Warning: suspiciously good taste in portfolios detected.";
+    bugToast.textContent = "Warning: Hello world.";
     document.body.appendChild(bugToast);
     setTimeout(() => bugToast.classList.add("show"), 900);
     setTimeout(() => bugToast.classList.remove("show"), 4200);

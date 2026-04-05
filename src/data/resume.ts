@@ -20,63 +20,70 @@ export type TimelineItem = {
 
 export const profile = {
   name: "Jing Kang",
-  role: "CS Student. Builder. Occasional bug hunter.",
-  tagline: "I build things that do not break (most of the time).",
+  role: "CS Student. Frontend Builder. Occasional bug hunter.",
+  tagline: "I build technical interfaces that stay usable under pressure.",
   intro:
-    "I like solving messy technical problems, from CTF-style debugging sessions to full-stack apps and Web3 experiments.",
+    "I like solving messy technical problems and turning them into clean React/TypeScript interfaces, especially when the UI needs to visualize complex data, controls, or system state.",
   email: "leejingkang6@gmail.com",
   github: "https://github.com/NoelRook",
   linkedin: "https://www.linkedin.com/in/leejingkang/"
 };
 
 export const aboutParagraphs: string[] = [
-  "I enjoy breaking systems just enough to understand them, then rebuilding them properly. That mindset follows me everywhere: side projects, hackathons, and late-night debugging spirals.",
-  "I am especially interested in Web3 experimentation, practical product engineering, and technical problem-solving that feels like puzzle mode. If there is a weird edge case, I usually want to chase it.",
+  "I enjoy breaking systems just enough to understand them, then rebuilding them properly. That mindset shows up when I am debugging UI issues, cleaning up state flow, or wiring together something that needs to feel precise and reliable.",
+  "I am especially interested in frontend work for scientific and technical tools: dashboards, instrumentation views, visualization layers, and interfaces where clarity matters more than decoration.",
   "I also spent time on exchange in Korea, which taught me how to adapt quickly, collaborate across different working styles, and stay calm when everything feels unfamiliar."
 ];
 
 export const interests: string[] = [
-  "Web3",
-  "Hack&Roll",
-  "CTF Challenges",
+  "React UI",
+  "Technical Visualization",
   "Systems Debugging",
-  "Product UX"
+  "Hack&Roll",
+  "CTF Challenges"
 ];
 
 export const projects: ProjectItem[] = [
   {
     title: "Receipt OCR Expense Tracker",
     description:
-      "Scans receipt images and auto-parses key fields into structured transactions, reducing manual logging time.",
-    stack: ["React", "Node.js", "OCR API", "PostgreSQL"],
-    github: "https://github.com/NoelRook"
+      "Scans receipt images and auto-parses key fields into structured transactions with a UI focused on fast review and low-friction interaction.",
+    stack: ["Android Studio", "Firebase", "OCR API", "Java"],
+    github: "https://github.com/NoelRook/SplitMate"
   },
   {
     title: "Transaction Reconciliation Service",
     description:
-      "Backend-heavy service for validating, reconciling, and auditing transaction records across asynchronous pipelines.",
+      "Backend-heavy service for validating, reconciling, and auditing transaction records, useful practice for systems that need reliable data flow and clear status handling.",
     stack: ["Java", "SQL", "REST", "Docker"],
     github: "https://github.com/NoelRook"
   },
   {
-    title: "Productivity Chrome Extension",
+    title: "Clicker-Chaos Chrome Extension",
     description:
-      "Browser extension with focus timers, smart blocking rules, and usage insights designed for deep work sessions.",
+      "Built a Chrome extension for a hackathon to explore extension development, event handling, and lightweight UI interactions.",
     stack: ["JavaScript", "Chrome APIs", "Local Storage"],
     github: "https://github.com/NoelRook"
   },
   {
-    title: "Web3 Wallet Activity Explorer",
+    title: "crop-predictor",
     description:
-      "Visual dashboard for exploring wallet transaction histories, balances, and token movements in a cleaner UI.",
-    stack: ["TypeScript", "Web3", "Next.js"],
-    github: "https://github.com/NoelRook"
+      "Visual dashboard for interpreting data from IoT devices, with emphasis on readable charts, state clarity, and technical decision support.",
+    stack: ["TypeScript", "Flask", "Python", "Machine Learning"],
+    github: "https://github.com/NoelRook/crop-predictor"
+  },
+  {
+    title: "BearWithIt",
+    description:
+      "Study companion built as a practical helper for focus sessions, combining computer vision and AI-backed features into a simple product flow.",
+    stack: ["AWS Bedrock", "Transcribe", "OpenCV"],
+    github: "https://github.com/NoelRook/BearWithIt"
   },
   {
     title: "Realtime Team Dashboard",
     description:
-      "Project ops dashboard with realtime updates and role-based workflows for teams that move fast.",
-    stack: ["React", "Node.js", "Socket.IO", "PostgreSQL"],
+      "Realtime ops dashboard with role-based workflows and live updates, the kind of interface work that maps well to technical control panels and instrumentation views.",
+    stack: ["React", "Node.js", "PostgreSQL"],
     github: "https://github.com/NoelRook"
   }
 ];
@@ -84,7 +91,7 @@ export const projects: ProjectItem[] = [
 export const skillGroups: SkillGroup[] = [
   {
     title: "Frontend",
-    items: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS"]
+    items: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "State Management"]
   },
   {
     title: "Backend",
@@ -92,11 +99,11 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "Systems / Databases",
-    items: ["PostgreSQL", "SQL", "Data Modeling", "Debugging", "Performance Tuning"]
+    items: ["PostgreSQL", "SQL", "Data Modeling", "Debugging", "Performance Tuning", "Instrumentation UIs"]
   },
   {
     title: "Tools",
-    items: ["Git", "Docker", "GitHub Actions", "Linux", "Figma"]
+    items: ["Git", "Docker", "GitHub Actions", "Linux", "Figma", "Chrome APIs"]
   }
 ];
 
@@ -105,30 +112,30 @@ export const timeline: TimelineItem[] = [
     title: "Software Engineer Intern",
     subtitle: "Hayysoft",
     period: "2024",
-    impact: "Built internal tooling that automated repetitive work and improved reliability for everyday operations."
+    impact: "Built internal tooling that automated repetitive work and improved reliability for everyday operations, giving me more practice with UI consistency and backend coordination."
   },
   {
     title: "Engineering Intern",
     subtitle: "Temasek Polytechnic Advanced Manufacturing Centre",
     period: "2023",
-    impact: "Worked on digital workflows and process improvements with a strong focus on practical implementation."
+    impact: "Worked on digital workflows and process improvements with a strong focus on practical implementation and clear interface behavior."
   },
   {
-    title: "Hackathon Projects",
-    subtitle: "Hack&Roll and team builds",
-    period: "Ongoing",
-    impact: "Rapid prototyping under pressure, tight collaboration, and shipping usable demos fast."
+    title: "What the Hack 2024",
+    subtitle: "BearWithIt",
+    period: "2024",
+    impact: "Won Best-automation award for BearWithIt project."
   },
   {
     title: "Student Exchange",
-    subtitle: "Korea",
+    subtitle: "Korea, China",
     period: "Academic Exchange",
-    impact: "Gained global exposure, stronger communication adaptability, and confidence in unfamiliar environments."
+    impact: "Gained global exposure, stronger communication adaptability, and confidence working in unfamiliar environments."
   }
 ];
 
 export const nowExploring: string[] = [
-  "Building a cleaner Chrome extension architecture",
   "Going deeper into systems-level debugging",
-  "Experimenting with practical Web3 tooling"
+  "Building cleaner technical dashboards and control-panel style UIs",
+  "Wargaming on OverTheWire"
 ];
